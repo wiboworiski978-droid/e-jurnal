@@ -9,10 +9,15 @@ $username = $_POST['username'] ?? '';
 $password = $_POST['password'] ?? '';
 
 if (empty($role) || empty($username) || empty($password)) {
-    die("semua data wajib diisi.");
+    header("Location: login.php?error=Semua data wajib diisi");
+    exit;
 }
 
-// login siswa
+
+/* =========================
+   LOGIN SISWA
+========================= */
+
 if ($role === "siswa") {
 
     $query = "SELECT * FROM siswa WHERE nisn = ?";
@@ -33,19 +38,22 @@ if ($role === "siswa") {
 
         header("Location: ../siswa/dashboard.php");
         exit;
-    } else {
-        
-        header("Location: login.php?error=Login siswa gagal");
-        exit;
     }
+
+    header("Location: login.php?error=Username atau password siswa salah");
+    exit;
 }
 
-// login guru
 
-if ($role === "guru") {
+/* =========================
+   LOGIN GURU
+========================= */
+
+elseif ($role === "guru") {
+
     $query = "SELECT * FROM guru WHERE nip = ?";
 
-    $stmt =mysqli_prepare($conn, $query);
+    $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "s", $username);
     mysqli_stmt_execute($stmt);
 
@@ -61,16 +69,19 @@ if ($role === "guru") {
 
         header("Location: ../guru/dashboard.php");
         exit;
-
-    } else {
-        header("Location: login.php?error=Login guru gagal");
-        exit;
     }
+
+    header("Location: login.php?error=Username atau password guru salah");
+    exit;
 }
 
 
-// login admin
-if ($role === "admin") {
+/* =========================
+   LOGIN ADMIN
+========================= */
+
+elseif ($role === "admin") {
+
     $query = "SELECT * FROM admin WHERE username = ?";
 
     $stmt = mysqli_prepare($conn, $query);
@@ -81,19 +92,27 @@ if ($role === "admin") {
     $admin = mysqli_fetch_assoc($result);
 
     if ($admin && password_verify($password, $admin['kode_unik'])) {
-        
+
         $_SESSION['login'] = true;
         $_SESSION['role'] = "admin";
         $_SESSION['id_admin'] = $admin['id_admin'];
         $_SESSION['nama'] = $admin['username'];
 
-        header("Location: ../admin/dahboard.php");
-    } else {
-        header("Location: login.php?error=Login admin gagal");
+        header("Location: ../admin/dashboard.php");
         exit;
     }
+
+    header("Location: login.php?error=Username atau kode unik admin salah");
+    exit;
 }
 
-// role tidak valid
-header("Location: login.php?error=Role tidak valid");
-exit;
+
+/* =========================
+   ROLE TIDAK VALID
+========================= */
+
+else {
+
+    header("Location: login.php?error=Role tidak valid");
+    exit;
+}
