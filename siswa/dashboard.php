@@ -178,7 +178,13 @@ $result_jurnal = mysqli_stmt_get_result($stmt_jurnal);
 
                             </td>
 
-                            <td>
+                          <td>
+
+                                <a href="detail_jurnal.php?id=<?= $jurnal['id_jurnal']; ?>">
+                                     Detail
+                                </a>
+
+                                |
 
                                 <a href="edit_jurnal.php?id=<?= $jurnal['id_jurnal']; ?>">
                                     Edit
@@ -193,7 +199,7 @@ $result_jurnal = mysqli_stmt_get_result($stmt_jurnal);
                                     Hapus
                                 </a>
 
-                            </td>
+                            </td>  
 
                         </tr>
 
