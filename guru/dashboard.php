@@ -273,6 +273,12 @@ $total_bimbingan = mysqli_fetch_assoc(
                 Riwayat Bimbingan
             </a>
 
+            <br><br>
+
+            <a href="cetak_laporan.php">
+                Cetak Laporan Jurnal
+            </a>
+
         </section>
 
     </main>
